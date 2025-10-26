@@ -27,33 +27,6 @@ locations <- readxl::read_excel(
   relocate(abbreviation, name)
 
 write_csv(x = locations, file = "locations.csv")
-# als: Alsace
-# auv: Auvergne
-# aux: Auxerre-Avalon
-# bea: Beaujolais and Maconnais
-# bor: Bordeaux
-# bur: Burgundy
-# cha1: Champagne 1
-# cha2: Champagne 2
-# gai: Gaillac- South-West
-# ger: Germany
-# hlv: High Loire Valley
-# idf: Ile de France
-# jur: Jura
-# lan: Languedoc
-# llv: Low Loire Valley
-# lux: Luxembourg
-# mar: Maritime alps
-# nit: Northern Italy
-# nlo: Northern  Lorraine
-# nrv: Northern Rhone valley
-# sav: Savoie
-# spa: Spain
-# slo: Southern Lorraine
-# srv: Southern Rhone valley
-# swi: Switzerland (Leman Lake)
-# vse: Various South-East
-# vpc: Vendée - Poitou Charent
 
 ## create long data ----
 wineharvest_long <- wineharvest_wide |> 
@@ -69,9 +42,9 @@ wineharvest_caption <- "Daux, V., Garcia de Cortazar-Atauri, I., Yiou, P., Chuin
 
 p <- ggplot(data = wineharvest_wide, mapping = aes(x = year, y = bur)) +
   geom_hline(yintercept = 0, linewidth = 0.5, colour = "darkgray") +
-  geom_line(linewidth = 0.5, colour = "gray", alpha = 0.5) +
+  geom_line(linewidth = 0.5, colour = "gray", alpha = 0.25) +
   geom_point(size = 1) +
-  geom_smooth(method = "loess", formula = "y ~ x", se = TRUE, colour = "#800020", fill = "#800020") +
+  geom_smooth(method = "loess", formula = "y ~ x", se = TRUE, colour = "#800020", fill = "#800020", span = 0.3, alpha = 0.2) +
   # scale_x_continuous(breaks = seq(1500, 2050, 50), limits = c(1500, NA)) +
   scale_x_continuous(breaks = seq(1350, 2050, 50)) +
   scale_y_continuous(breaks = seq(-10, 70, 20)) +
@@ -91,13 +64,13 @@ ggsave(filename = "burgundy.png", plot = p, path = ".", width = 24, height = 12,
 variable_selection <- c("bur", "jur", "srv", "swi")
 
 p <- ggplot(data = wineharvest_long |> filter(abbreviation %in% variable_selection), mapping = aes(x = year, y = value)) +
-  geom_hline(yintercept = 0, linewidth = 0.5, colour = "darkgray") +
-  geom_line(linewidth = 0.5, colour = "gray", alpha = 0.5) +
+  # geom_hline(yintercept = 0, linewidth = 0.5, colour = "darkgray") +
+  geom_line(linewidth = 0.5, colour = "gray", alpha = 0.25) +
   geom_point(size = 1) +
-  geom_smooth(method = "loess", formula = "y ~ x", se = TRUE, colour = "#800020", fill = "#800020") +
-  facet_wrap(facets = vars(name), ncol = 1) +
+  geom_smooth(method = "loess", formula = "y ~ x", se = TRUE, colour = "#800020", fill = "#800020", span = 0.3, alpha = 0.2) +
+  facet_wrap(facets = vars(name), ncol = 1, scale = "free_y") +
   scale_x_continuous(breaks = seq(1350, 2050, 50)) +
-  scale_y_continuous(breaks = seq(-10, 70, 20)) +
+  # scale_y_continuous(breaks = seq(-10, 70, 20)) +
   labs(
     title = "Annual wine harvest, number of days after August 31",
     subtitle = NULL,
